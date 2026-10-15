@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b1c">
+<title>VOCAL & REMIX LAB</title>
+<style>
+:root {
+  --bg:#080b1c;
+  --panel:#121a35;
+  --line:#29385f;
+  --cyan:#4deaff;
+  --pink:#ff4ecb;
+  --text:#f1f5ff;
+  --muted:#9ba9cb;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  color:var(--text);
+  font:15px Arial,sans-serif;
+  background:
+    radial-gradient(ellipse at 15% 0%,#24275d,transparent 45%),
+    radial-gradient(ellipse at 90% 25%,#391548,transparent 38%),
+    var(--bg);
+}
+main { max-width:950px; margin:auto; padding:16px; }
+header { display:flex; align-items:center; gap:14px; margin:8px 0 18px; }
+.logo {
+  width:55px;height:55px;border-radius:17px;
+  display:grid;place-items:center;font-size:27px;
+  background:linear-gradient(135deg,#4deaff,#6464ff,#ff4ecb);
+  box-shadow:0 0 25px #4deaff55;
+}
+h1 { font-size:clamp(22px,5vw,34px); margin:0; }
+h1 span { color:var(--cyan); }
+.subtitle { color:var(--muted); margin-top:6px; }
+.panel {
+  padding:16px;margin:13px 0;border:1px solid var(--line);
+  border-radius:18px;
+  background:linear-gradient(145deg,#151e3aee,#0c1128f5);
+  box-shadow:0 12px 30px #0004;
+}
+h2 { font-size:18px; margin:0 0 15px; }
+.grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+label { display:block;color:var(--muted);font-size:13px;margin-bottom:7px; }
+input,select,button {
+  font:inherit;color:var(--text);
+  background:#0a1026;border:1px solid #34436c;
+  border-radius:10px;padding:11px;width:100%;
+}
+input[type=file] { font-size:12px;padding:8px; }
+input[type=range] { padding:0;accent-color:var(--cyan); }
+button { cursor:pointer;font-weight:bold; }
+.primary { background:linear-gradient(100deg,#00c7d9,#6867ff);color:#071022;border:0; }
+.pink { background:linear-gradient(100deg,#e83eae,#805aff);border:0; }
+.buttons { display:flex;flex-wrap:wrap;gap:9px;margin-top:14px; }
+.buttons button { flex:1;min-width:125px; }
+.track {
+  background:#090f24;border:1px solid #29385f;
+  padding:12px;border-radius:12px;margin-top:12px;
+}
+.track strong { display:block;overflow-wrap:anywhere; }
+audio { width:100%;height:38px;margin-top:9px; }
+.small { font-size:12px;color:var(--muted);line-height:1.6; }
+.value { color:var(--cyan);float:right; }
+.status { color:var(--cyan);font-size:12px;margin-top:5px; }
+.pills { display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px; }
+.pill { border:1px solid #34436c;border-radius:20px;padding:7px 10px;color:var(--cyan);font-size:12px; }
+.notice { border-left:3px solid #ffc857;padding:10px;background:#352b1b55;font-size:13px;line-height:1.6;border-radius:5px; }
+#message { color:var(--cyan);margin-top:12px;overflow-wrap:anywhere; }
+hr { border:0;border-top:1px solid var(--line);margin:16px 0; }
+footer { text-align:center;color:var(--muted);font-size:12px;padding:20px; }
+@media(max-width:580px) {
+  main { padding:11px; }
+  .grid { grid-template-columns:1fr; }
+  .panel { padding:13px; }
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="logo">♫</div>
+  <div>
+    <h1>VOCAL <span>&</span> REMIX LAB</h1>
+    <div class="subtitle">AI Voice Studio · MP3 Remix · Mix Lab</div>
+  </div>
+</header>
+
+<div class="pills">
+  <span class="pill">Female Voice</span>
+  <span class="pill">Male Voice</span>
+  <span class="pill">Child Voice</span>
+  <span class="pill">Vocal Remover</span>
+  <span class="pill">MP3 Export</span>
+</div>
+
+<section class="panel">
+<h2>01 — Аудио файлдары</h2>
+<div class="grid">
+  <div>
+    <label>1-трек: вокал же ыр</label>
+    <input id="file1" type="file" accept="audio/*">
+    <div class="track">
+      <strong id="name1">1-трек жүктөлө элек</strong>
+      <div class="status" id="status1">Күтүүдө</div>
+      <audio id="audio1" controls></audio>
+    </div>
+  </div>
+  <div>
+    <label>2-трек: обон же кошумча үн</label>
+    <input id="file2" type="file" accept="audio/*">
+    <div class="track">
+      <strong id="name2">2-трек жүктөлө элек</strong>
+      <div class="status" id="status2">Күтүүдө</div>
+      <audio id="audio2" controls></audio>
+    </div>
+  </div>
+</div>
+<p class="small">MP3, WAV жана браузер колдогон башка аудио файлдарды тандаңыз.</p>
+</section>
+
+<section class="panel">
+<h2>02 — Remix Mixer</h2>
+<div class="grid">
+  <div>
+    <label>1-тректин үнү <span class="value" id="vol1v">100%</span></label>
+    <input id="vol1" type="range" min="0" max="150" value="100">
+  </div>
+  <div>
+    <label>2-тректин үнү <span class="value" id="vol2v">70%</span></label>
+    <input id="vol2" type="range" min="0" max="150" value="70">
+  </div>
+  <div>
+    <label>Тонду өзгөртүү <span class="value" id="pitchv">0</span></label>
+    <input id="pitch" type="range" min="-6" max="6" step="1" value="0">
+    <p class="small">Тон өзгөргөндө ойнотуу ылдамдыгы да өзгөрөт.</p>
+  </div>
+  <div>
+    <label>Ойнотуу ылдамдыгы <span class="value" id="speedv">1.00×</span></label>
+    <input id="speed" type="range" min=".7" max="1.3" step=".01" value="1">
+  </div>
+  <div>
+    <label>Үн эффекти</label>
+    <select id="effect">
+      <option value="clean">Таза үн</option>
+      <option value="warm">Жумшак үн</option>
+      <option value="bright">Жаркын үн</option>
+      <option value="radio">Radio үнү</option>
+    </select>
+  </div>
+  <div>
+    <label>Тректердин башталышы</label>
+    <select id="offset">
+      <option value="0">Экөөнү бир убакта баштоо</option>
+      <option value="2">2-тректи 2 секунд кеч баштоо</option>
+      <option value="5">2-тректи 5 секунд кеч баштоо</option>
+    </select>
+  </div>
+</div>
+<div class="buttons">
+  <button class="primary" id="play">▶ MIX угуу</button>
+  <button id="stop">■ Токтотуу</button>
+  <button class="pink" id="export">⬇ MP3 сактоо</button>
+</div>
+<div id="message">Файлдарды жүктөңүз.</div>
+</section>
+
+<section class="panel">
+<h2>03 — AI Voice Changer</h2>
+<div class="grid">
+  <div>
+    <label>Кайсы үнгө өзгөртүү керек?</label>
+    <select id="voice">
+      <option value="female">Жаш кыздын үнү</option>
+      <option value="woman">Аялдын үнү</option>
+      <option value="child">Баланын үнү</option>
+      <option value="male">Эркектин үнү</option>
+      <option value="deep">Төмөн, жоон үн</option>
+      <option value="original">Өзүнүн үнү</option>
+    </select>
+  </div>
+  <div>
+    <label>AI серверинин дареги</label>
+    <input id="endpoint" type="url" placeholder="https://your-server.example/api">
+  </div>
+</div>
+<div class="buttons">
+  <button class="pink" id="ai">AI Voice / Vocal API</button>
+</div>
+<p class="small" id="aiStatus">AI сервер туташтырыла элек.</p>
+<div class="notice">
+  Бул баскыч азырынча демо режиминде. Чыныгы үн конвертациясы үчүн сервердин API протоколун жана моделин кошуу керек. Жөнөкөй pitch өзгөртүү адамдын үнүн чыныгы кыздын же эркектин үнүнө айлантпайт.
+</div>
+</section>
+
+<section class="panel">
+<h2>04 — Вокалды жана обонду бөлүү</h2>
+<label>AI separation серверинин дареги</label>
+<input id="separationEndpoint" type="url" placeholder="https://your-server.example/separate">
+<div class="buttons">
+  <button id="separate">Вокал / Instrumental бөлүү</button>
+</div>
+<p class="small" id="separationStatus">Demucs же башка stem-separation моделин серверге орнотуу керек.</p>
+<div class="notice">
+  Ырдан вокалды же музыканы так бөлүү бул HTML кодунда өзүнөн-өзү иштебейт. Серверге файл жүктөп, вокал жана инструменталдык тректерди кайра алган API талап кылынат.
+</div>
+</section>
+
+<footer>VOCAL & REMIX LAB · Mobile Audio Studio</footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+let files = [null,null];
+let buffers = [null,null];
+let objectURLs = [null,null];
+let ctx = null;
+let sources = [];
+
+function message(text) { $("message").textContent = text; }
+
+[1,2].forEach((number,index) => {
+  $("file"+number).addEventListener("change", async event => {
+    const file = event.target.files[0];
+    if (!file) return;
+    files[index] = file;
+
+    if (objectURLs[index]) URL.revokeObjectURL(objectURLs[index]);
+    objectURLs[index] = URL.createObjectURL(file);
+    $("audio"+number).src = objectURLs[index];
+    $("name"+number).textContent = file.name;
+    $("status"+number).textContent =
+      (file.size / 1048576).toFixed(2) + " MB";
+
+    buffers[index] = null;
+    message("Аудио окулуп жатат...");
+
+    try {
+      const decoder = new (window.AudioContext || window.webkitAudioContext)();
+      buffers[index] = await decoder.decodeAudioData(await file.arrayBuffer());
+      await decoder.close();
+      message("Аудио даяр. MIX же MP3 сактоо баскычын колдонуңуз.");
+    } catch(error) {
+      message("Файл окулган жок. Башка MP3 же WAV файлды текшериңиз.");
+    }
+  });
+});
+
+function updateLabels() {
+  $("vol1v").textContent = $("vol1").value + "%";
+  $("vol2v").textContent = $("vol2").value + "%";
+  $("pitchv").textContent = $("pitch").value + " semitone";
+  $("speedv").textContent = Number($("speed").value).toFixed(2) + "×";
+}
+["vol1","vol2","pitch","speed"].forEach(id =>
+  $(id).addEventListener("input",updateLabels)
+);
+updateLabels();
+
+function stopAudio() {
+  sources.forEach(source => {
+    try { source.stop(); } catch(e) {}
+  });
+  sources = [];
+  if (ctx) {
+    ctx.close().catch(()=>{});
+    ctx = null;
+  }
+}
+
+$("stop").onclick = () => {
+  stopAudio();
+  message("Ойнотуу токтотулду.");
+};
+
+$("play").onclick = async () => {
+  stopAudio();
+  if (!buffers.some(Boolean)) {
+    message("Адегенде аудио жүктөңүз.");
+    return;
+  }
+
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  await ctx.resume();
+  const start = ctx.currentTime + .1;
+  const rate = Number($("speed").value) *
+    Math.pow(2, Number($("pitch").value)/12);
+
+  buffers.forEach((buffer,index) => {
+    if (!buffer) return;
+
+    const source = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    source.buffer = buffer;
+    source.playbackRate.value = rate;
+    gain.gain.value = Number($("vol"+(index+1)).value)/100;
+
+    const effect = $("effect").value;
+    filter.type = "allpass";
+
+    if (effect === "warm") {
+      filter.type = "lowpass";
+      filter.frequency.value = 6500;
+    }
+    if (effect === "bright") {
+      filter.type = "highshelf";
+      filter.frequency.value = 2500;
+      filter.gain.value = 4;
+    }
+    if (effect === "radio") {
+      filter.type = "bandpass";
+      filter.frequency.value = 1800;
+      filter.Q.value = .7;
+    }
+
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    const delay = index === 1 ? Number($("offset").value) : 0;
+    source.start(start + delay);
+    sources.push(source);
+  });
+
+  message("Аудиолор аралаштырылып ойнотулууда.");
+};
+
+/* MP3 экспорт үчүн LAME коддогуч */
+const lameScript = document.createElement("script");
+lameScript.src =
+  "https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js";
+lameScript.onload = () => message("MP3 коддогуч даяр.");
+lameScript.onerror = () =>
+  message("MP3 коддогуч жүктөлгөн жок. Интернетти текшериңиз.");
+document.head.appendChild(lameScript);
+
+$("export").onclick = async () => {
+  if (!buffers.some(Boolean)) {
+    message("MP3 экспорт үчүн аудио жүктөңүз.");
+    return;
+  }
+  if (!window.lamejs) {
+    message("MP3 коддогуч жүктөлүшүн күтүңүз.");
+    return;
+  }
+
+  $("export").disabled = true;
+  message("MP3 файл даярдалып жатат...");
+
+  try {
+    const rate = Number($("speed").value) *
+      Math.pow(2, Number($("pitch").value)/12);
+    const delay = Number($("offset").value);
+    const active = buffers.map((b,i)=>b ? i : -1)
+      .filter(i=>i>=0);
+    const duration = Math.max(...active.map(i =>
+      buffers[i].duration/rate + (i===1 ? delay : 0)
+    ));
+
+    const sampleRate = 44100;
+    const length = Math.ceil(duration*sampleRate);
+    const left = new Float32Array(length);
+    const right = new Float32Array(length);
+
+    for (const index of active) {
+      const buffer = buffers[index];
+      const gain = Number($("vol"+(index+1)).value)/100;
+      const startAt = Math.floor(
+        (index===1 ? delay : 0)*sampleRate
+      );
+      const l = buffer.getChannelData(0);
+      const r = buffer.numberOfChannels > 1
+        ? buffer.getChannelData(1) : l;
+      const step = buffer.sampleRate/sampleRate*rate;
+      const effect = $("effect").value;
+      const count = Math.min(length-startAt,Math.ceil(buffer.length/step));
+
+      for (let j=0;j<count;j++) {
+        const pos = j*step;
+        const k = Math.floor(pos);
+        const frac = pos-k;
+        if (k+1>=l.length) break;
+
+        let a = l[k]*(1-frac)+l[k+1]*frac;
+        let b = r[k]*(1-frac)+r[k+1]*frac;
+
+        if (effect==="warm") {
+          a=Math.tanh(a*1.15);
+          b=Math.tanh(b*1.15);
+        }
+        if (effect==="bright") {
+          a=Math.tanh(a*1.3);
+          b=Math.tanh(b*1.3);
+        }
+        if (effect==="radio") {
+          const mono=(a+b)*.25;
+          a=mono;b=mono;
+        }
+
+        left[startAt+j]+=a*gain;
+        right[startAt+j]+=b*gain;
+      }
+    }
+
+    let peak=0;
+    for (let i=0;i<length;i++)
+      peak=Math.max(peak,Math.abs(left[i]),Math.abs(right[i]));
+    const scale=peak>.98 ? .98/peak : 1;
+
+    const encoder = new lamejs.Mp3Encoder(2,sampleRate,192);
+    const chunks=[];
+    const block=1152;
+
+    for (let p=0;p<length;p+=block) {
+      const count=Math.min(block,length-p);
+      const l=new Int16Array(count);
+      const r=new Int16Array(count);
+
+      for (let j=0;j<count;j++) {
+        l[j]=Math.max(-32768,Math.min(32767,
+          left[p+j]*scale*32767));
+        r[j]=Math.max(-32768,Math.min(32767,
+          right[p+j]*scale*32767));
+      }
+
+      const data=encoder.encodeBuffer(l,r);
+      if(data.length) chunks.push(new Uint8Array(data));
+
+      if(p%(block*100)===0)
+        message("MP3 экспорт: "+Math.round(p/length*100)+"%");
+    }
+
+    const tail=encoder.flush();
+    if(tail.length) chunks.push(new Uint8Array(tail));
+
+    const blob=new Blob(chunks,{type:"audio/mpeg"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download="vocal-remix-lab.mp3";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+
+    message("Даяр! MP3 файлын жүктөө башталды.");
+  } catch(error) {
+    console.error(error);
+    message("Экспорт катасы. Кыскараак файл менен аракет кылыңыз.");
+  } finally {
+    $("export").disabled = false;
+  }
+};
+
+/* AI функциялары азырынча серверсиз иштебейт */
+$("ai").onclick = () => {
+  const endpoint=$("endpoint").value.trim();
+  if(!endpoint) {
+    $("aiStatus").textContent =
+      "AI сервердин дарегин киргизүү керек. Азырынча сервер жок.";
+    return;
+  }
+  $("aiStatus").textContent =
+    "Дарек киргизилди, бирок API протоколу кошула элек. " +
+    "Voice-conversion серверине атайын upload жана response коду керек.";
+};
+
+$("separate").onclick = () => {
+  const endpoint=$("separationEndpoint").value.trim();
+  if(!endpoint) {
+    $("separationStatus").textContent =
+      "Вокал бөлүү үчүн Demucs сыяктуу AI сервердин дарегин киргизиңиз.";
+    return;
+  }
+  $("separationStatus").textContent =
+    "Дарек киргизилди. Файл жөнөтүү жана stem файлдарын кабыл алуу үчүн " +
+    "сервердин API форматын кодго кошуу керек.";
+};
+</script>
+</body>
+</html>
