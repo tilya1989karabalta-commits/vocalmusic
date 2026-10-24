@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Натяжной Потолок - Калькулятор</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+
+        /* Меню (Header) */
+        header { background: #2c3e50; color: #fff; padding: 15px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .logo span { color: #f1c40f; }
+        nav a { color: #fff; text-decoration: none; margin-left: 15px; font-weight: 500; transition: color 0.3s; font-size: 0.95rem; }
+        nav a:hover { color: #f1c40f; }
+
+        /* --- КАЛЬКУЛЯТОР (Эң жогорку жакта) --- */
+        .calculator-section { padding: 40px 0; background: #fff; }
+        .calculator-section h2 { text-align: center; margin-bottom: 30px; color: #2c3e50; font-size: 1.8rem; }
+        
+        .calc-wrapper { 
+            display: flex; 
+            background: #fff; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+            flex-wrap: wrap;
+            border: 1px solid #eee;
+        }
+        
+        .calc-inputs { flex: 1.2; padding: 30px; min-width: 300px; }
+        .calc-results { flex: 1; background: #2c3e50; padding: 30px; min-width: 300px; color: #fff; display: flex; flex-direction: column; justify-content: center;}
+
+        .row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .col { flex: 1; }
+        
+        .calc-inputs label { display: block; margin-bottom: 5px; font-weight: 600; color: #34495e; font-size: 0.95rem; }
+        .calc-inputs input, .calc-inputs select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 1rem; background: #f9f9f9; transition: border-color 0.3s; }
+        .calc-inputs input:focus, .calc-inputs select:focus { outline: none; border-color: #3498db; background: #fff; }
+        
+        .checkbox-group { margin-bottom: 15px; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 2px solid #eee; }
+        .checkbox-group label { font-weight: normal; display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px; font-size: 0.95rem; color: #333;}
+        .checkbox-group label:last-child { margin-bottom: 0; }
+        .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; margin-bottom: 0; cursor: pointer; }
+        
+        .calc-results h3 { margin-bottom: 20px; color: #f1c40f; border-bottom: 2px solid #f1c40f; padding-bottom: 10px; display: inline-block; font-size: 1.4rem; }
+        .calc-results ul { list-style: none; }
+        .calc-results li { margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px dashed #4a6278; padding-bottom: 8px; font-size: 1.05rem; }
+        .calc-results .total { font-size: 1.5rem; font-weight: bold; color: #f1c40f; border-bottom: none; margin-top: 15px; padding-top: 15px; border-top: 2px solid #f1c40f; }
+        .note { font-size: 0.85rem; color: #bdc3c7; margin-top: 15px; font-style: italic; }
+
+        /* --- ПРАЙС-ЛИСТ --- */
+        .prices-section { padding: 50px 0; background: #f4f7f6; }
+        .prices-section h2 { text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 1.8rem; }
+        .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .price-card { background: #fff; padding: 25px; border-radius: 8px; border-left: 5px solid #f1c40f; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.3s; position: relative; }
+        .price-card:hover { transform: translateY(-5px); }
+        .price-card h4 { margin-bottom: 15px; color: #2c3e50; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; }
+        .price-card ul { list-style: none; }
+        .price-card li { margin-bottom: 10px; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; color: #555; gap: 8px; }
+        .price-card li .name { flex: 1; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+        .price-card li .name:hover { background: #eee; }
+        .price-card li .price { font-weight: bold; color: #2c3e50; cursor: pointer; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+        .price-card li .price:hover { background: #f1c40f; color: #000; }
+        .price-card li .delete-btn { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.9rem; padding: 2px 6px; opacity: 0.6; }
+        .price-card li .delete-btn:hover { opacity: 1; }
+
+        .add-product-box { background: #e8f5e9; border: 2px dashed #27ae60; border-radius: 10px; padding: 25px; margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .add-product-box h3 { color: #27ae60; margin-bottom: 15px; text-align: center; }
+        .add-form { display: flex; flex-wrap: wrap; gap: 12px; }
+        .add-form input, .add-form select { flex: 1; min-width: 140px; padding: 12px; border: 2px solid #c8e6c9; border-radius: 8px; font-size: 1rem; }
+        .add-form button { background: #27ae60; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; white-space: nowrap; }
+        .add-form button:hover { background: #219150; }
+
+        .edit-mode-btn { display: block; margin: 0 auto 30px; background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; }
+        .edit-mode-btn:hover { background: #2980b9; }
+        .edit-mode-btn.active { background: #e67e22; }
+
+        footer { background: #2c3e50; color: #fff; text-align: center; padding: 30px 0; }
+        footer p { margin-bottom: 8px; font-size: 1.05rem; }
+        footer .contact-info { font-size: 1.1rem; }
+        footer .contact-info i { color: #f1c40f; margin-right: 6px; }
+        footer .contact-info a { color: #f1c40f; text-decoration: none; }
+        footer .contact-info a:hover { text-decoration: underline; }
+
+        .inline-edit { width: 100%; padding: 4px 6px; border: 2px solid #f1c40f; border-radius: 4px; font-size: 0.95rem; }
+
+        @media (max-width: 600px) {
+            .calc-inputs, .calc-results { padding: 20px; }
+            .row { flex-direction: column; gap: 10px; }
+            footer .contact-info { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Меню -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-home"></i> Potolok<span>Master</span>
+            </div>
+            <nav>
+                <a href="#calculator">Калькулятор</a>
+                <a href="#prices">Баалар</a>
+                <a href="#contact">Байланыш</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- КАЛЬКУЛЯТОР (Беттин эң үстүндө турат) -->
+    <section id="calculator" class="calculator-section">
+        <div class="container">
+            <h2>Тез эсептөө</h2>
+            <div class="calc-wrapper">
+                <div class="calc-inputs">
+                    <div class="row">
+                        <div class="col">
+                            <label>Аянты (м²):</label>
+                            <input type="number" id="area" value="20" min="1" step="0.1">
+                        </div>
+                        <div class="col">
+                            <label>Периметр (м):</label>
+                            <input type="number" id="perimeter" value="18" min="1" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label>Плёнка түрү:</label>
+                            <select id="filmType">
+                                <option value="300">Матовая (300 сом/м²)</option>
+                                <option value="350">Глянцевая (350 сом/м²)</option>
+                                <option value="400">Сатиновая (400 сом/м²)</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>Багет түрү:</label>
+                            <select id="bagetType">
+                                <option value="20">Местный (20 сом/м)</option>
+                                <option value="33">Россия (33 сом/м)</option>
+                                <option value="35">Ким Россия (35 сом/м)</option>
+                                <option value="65">Теневой ПВХ (65 сом/м)</option>
+                                <option value="180">Теневой Алюм (180 сом/м)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label>Кошумча опциялар:</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="hasLight"> Жарыктын сызыгы (Световая линия 3см)</label>
+                        <label><input type="checkbox" id="hasTrack"> Магниттик трек (2 метр)</label>
+                    </div>
+                </div>
+
+                <!-- Жыйынтык чыга турган бөлүк -->
+                <div class="calc-results">
+                    <h3>Жыйынтык:</h3>
+                    <ul>
+                        <li>Плёнка: <span id="res-film">0</span> сом</li>
+                        <li>Багет: <span id="res-baguette">0</span> сом</li>
+                        <li>Кронштейн жана Кольцо: <span id="res-mount">0</span> сом</li>
+                        <li>Кошумчалар: <span id="res-extra">0</span> сом</li>
+                        <li>Орнотуу эмгеги: <span id="res-labor">0</span> сом</li>
+                        <hr style="margin: 10px 0; border: 0; border-top: 1px solid #4a6278;">
+                        <li class="total">Жалпы баа: <span id="res-total">0</span> сом</li>
+                    </ul>
+                    <p class="note">* Эсептөө автоматтык түрдө жүрөт. Так бааны өлчөөдөн кийин айтабыз.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПРАЙС-ЛИСТ (Ошол бойдон) -->
+    <section id="prices" class="prices-section">
+        <div class="container">
+            <h2>Баалар (Прайс-лист)</h2>
+            
+            <button class="edit-mode-btn" id="editModeBtn" onclick="toggleEditMode()">
+                <i class="fas fa-edit"></i> Редактировать режимди күйгүзүү
+            </button>
+
+            <div class="price-grid" id="priceGrid">
+                <!-- JS аркылуу толтурулат -->
+            </div>
+
+            <div class="add-product-box">
+                <h3><i class="fas fa-plus-circle"></i> Товар кошуу</h3>
+                <div class="add-form">
+                    <select id="newCategory">
+                        <option value="Кольцо жана Кронштейн">Кольцо жана Кронштейн</option>
+                        <option value="Багет жана Гарпун">Багет жана Гарпун</option>
+                        <option value="Жарык жана Кошумчалар">Жарык жана Кошумчалар</option>
+                        <option value="Карниз жана Вставка">Карниз жана Вставка</option>
+                    </select>
+                    <input type="text" id="newName" placeholder="Товардын аталышы">
+                    <input type="number" id="newPrice" placeholder="Баасы (сом)" min="0">
+                    <input type="text" id="newUnit" placeholder="Бирдик (м, шт...)" value="сом">
+                    <button onclick="товарКошуу()">
+                        <i class="fas fa-plus"></i> Товар кошуу
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- БАЙЛАНЫШ -->
+    <footer id="contact">
+        <div class="container">
+            <p class="contact-info"><i class="fas fa-phone-alt"></i> <a href="tel:+996556652652">0556-652-652</a> &nbsp;|&nbsp; <a href="tel:+996559656657">0559-656-657</a></p>
+            <p class="contact-info"><i class="fas fa-map-marker-alt"></i> Кара-Балта шаары, Садовая 134</p>
+            <p style="margin-top: 12px; opacity: 0.7;">&copy; 2026 PotolokMaster. Бардык укуктар корголгон.</p>
+        </div>
+    </footer>
+
+    <script>
+        const defaultCategories = {
+            "Кольцо жана Кронштейн": [
+                { name: "Кольцо 10см", price: 15, unit: "сом" },
+                { name: "Кольцо 15см", price: 25, unit: "сом" },
+                { name: "Кольцо 25см", price: 30, unit: "сом" },
+                { name: "Кольцо 30см", price: 50, unit: "сом" },
+                { name: "Кронштейн 75/100", price: 30, unit: "сом" },
+                { name: "Кронштейн 100/125", price: 40, unit: "сом" },
+                { name: "Кронштейн 125/150", price: 50, unit: "сом" },
+                { name: "Кронштейн 150/200", price: 70, unit: "сом" }
+            ],
+            "Багет жана Гарпун": [
+                { name: "Багет Местный", price: 20, unit: "сом/м" },
+                { name: "Багет Россия", price: 33, unit: "сом/м" },
+                { name: "Багет Ким Россия", price: 35, unit: "сом/м" },
+                { name: "Гарпун Белый/Черный", price: 16, unit: "сом/м" },
+                { name: "Гарпун Тандем", price: 18, unit: "сом/м" },
+                { name: "Гарпун Двойной", price: 35, unit: "сом/м" },
+                { name: "Теневой Багет ПВХ", price: 65, unit: "сом/м" },
+                { name: "Теневой Багет Алюм", price: 180, unit: "сом/м" }
+            ],
+            "Жарык жана Кошумчалар": [
+                { name: "Световые линии 3см", price: 320, unit: "сом/м" },
+                { name: "Световые линии 5см", price: 360, unit: "сом/м" },
+                { name: "Магнитный трек", price: 1000, unit: "сом/м" },
+                { name: "Заглушка на магнит", price: 250, unit: "сом/м" },
+                { name: "Блок питания 100W", price: 600, unit: "сом" },
+                { name: "Лампа 60см 24w", price: 450, unit: "сом" },
+                { name: "Уголок", price: 450, unit: "сом" },
+                { name: "Заглушка", price: 100, unit: "сом" }
+            ],
+            "Карниз жана Вставка": [
+                { name: "Карниз ПК-14 черный", price: 700, unit: "сом/м" },
+                { name: "Карниз ПК-14 белый", price: 250, unit: "сом/м" },
+                { name: "Карниз ПК-15", price: 550, unit: "сом/пачка" },
+                { name: "Заглушка на ПК-14", price: 250, unit: "сом/шт" },
+                { name: "Вставка Черная/Белая", price: 35, unit: "сом/м" },
+                { name: "Разделитель ПВХ", price: 120, unit: "сом/м" },
+                { name: "Заглушка на разделитель", price: 100, unit: "сом/м" }
+            ]
+        };
+
+        const PRICES = {
+            kronshtein: 30, ring: 15, hook: 10, labor: 150,
+            lightLine: 320, powerSupply: 600, lamp: 450,
+            magneticTrack: 1000
+        };
+
+        let categories = {};
+        let editMode = false;
+
+        function loadData() {
+            const saved = localStorage.getItem('potolokPrices');
+            if (saved) {
+                categories = JSON.parse(saved);
+            } else {
+                categories = JSON.parse(JSON.stringify(defaultCategories));
+            }
+            renderPrices();
+        }
+
+        function saveData() {
+            localStorage.setItem('potolokPrices', JSON.stringify(categories));
+        }
+
+        function renderPrices() {
+            const grid = document.getElementById('priceGrid');
+            grid.innerHTML = '';
+
+            for (const [catName, products] of Object.entries(categories)) {
+                const card = document.createElement('div');
+                card.className = 'price-card';
+                
+                let html = `<h4>${catName}</h4><ul>`;
+                
+                products.forEach((p, index) => {
+                    html += `
+                        <li data-cat="${catName}" data-index="${index}">
+                            <span class="name" onclick="editName(this, '${catName}', ${index})">${p.name}</span>
+                            <span class="price" onclick="editPrice(this, '${catName}', ${index})">${p.price} ${p.unit}</span>
+                            ${editMode ? `<button class="delete-btn" onclick="deleteProduct('${catName}', ${index})" title="Өчүрүү"><i class="fas fa-trash"></i></button>` : ''}
+                        </li>
+                    `;
+                });
+                
+                html += `</ul>`;
+                card.innerHTML = html;
+                grid.appendChild(card);
+            }
+        }
+
+        function toggleEditMode() {
+            editMode = !editMode;
+            const btn = document.getElementById('editModeBtn');
+            if (editMode) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Редактировать режимди өчүрүү';
+                btn.classList.add('active');
+            } else {
+                btn.innerHTML = '<i class="fas fa-edit"></i> Редактировать режимди күйгүзүү';
+                btn.classList.remove('active');
+            }
+            renderPrices();
+        }
+
+        function editName(el, cat, index) {
+            if (!editMode) return;
+            const oldName = categories[cat][index].name;
+            const input = document.createElement('input');
+            input.className = 'inline-edit';
+            input.value = oldName;
+            el.replaceWith(input);
+            input.focus();
+
+            input.onblur = () => {
+                const newName = input.value.trim() || oldName;
+                categories[cat][index].name = newName;
+                saveData();
+                renderPrices();
+            };
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') input.blur();
+            };
+        }
+
+        function editPrice(el, cat, index) {
+            if (!editMode) return;
+            const oldPrice = categories[cat][index].price;
+            const input = document.createElement('input');
+            input.className = 'inline-edit';
+            input.type = 'number';
+            input.value = oldPrice;
+            input.style.width = '80px';
+            el.replaceWith(input);
+            input.focus();
+
+            input.onblur = () => {
+                const newPrice = parseFloat(input.value) || oldPrice;
+                categories[cat][index].price = newPrice;
+                saveData();
+                renderPrices();
+            };
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') input.blur();
+            };
+        }
+
+        function deleteProduct(cat, index) {
+            if (!confirm('Бул товарды өчүрөсүзбү?')) return;
+            categories[cat].splice(index, 1);
+            saveData();
+            renderPrices();
+        }
+
+        function товарКошуу() {
+            const cat = document.getElementById('newCategory').value;
+            const name = document.getElementById('newName').value.trim();
+            const price = parseFloat(document.getElementById('newPrice').value);
+            const unit = document.getElementById('newUnit').value.trim() || 'сом';
+
+            if (!name) { alert('Товардын аталышын жазыңыз!'); return; }
+            if (isNaN(price) || price < 0) { alert('Туура бааны жазыңыз!'); return; }
+
+            if (!categories[cat]) { categories[cat] = []; }
+
+            categories[cat].push({ name, price, unit });
+            saveData();
+            renderPrices();
+
+            document.getElementById('newName').value = '';
+            document.getElementById('newPrice').value = '';
+            document.getElementById('newUnit').value = 'сом';
+            alert(`"${name}" ийгиликтүү кошулду!`);
+        }
+
+        // ================= КАЛЬКУЛЯТОРДУН ТЕЗ ИШТЕШИ =================
+        function calculateTotal() {
+            let area = parseFloat(document.getElementById('area').value) || 0;
+            let perimeter = parseFloat(document.getElementById('perimeter').value) || 0;
+            let filmPrice = parseFloat(document.getElementById('filmType').value);
+            let bagetPrice = parseFloat(document.getElementById('bagetType').value);
+            
+            let hasLight = document.getElementById('hasLight').checked;
+            let hasTrack = document.getElementById('hasTrack').checked;
+
+            let filmCost = area * filmPrice;
+            let baguetteCost = perimeter * bagetPrice;
+            
+            let kronshteinCount = Math.ceil(area / 1.5);
+            let mountCost = kronshteinCount * (PRICES.kronshtein + PRICES.ring + PRICES.hook);
+            
+            let extraCost = 0;
+            if (hasLight) extraCost += (perimeter * PRICES.lightLine) + PRICES.powerSupply + PRICES.lamp;
+            if (hasTrack) extraCost += (2 * PRICES.magneticTrack);
+
+            let laborCost = area * PRICES.labor;
+            let total = filmCost + baguetteCost + mountCost + extraCost + laborCost;
+
+            document.getElementById('res-film').innerText = filmCost.toLocaleString();
+            document.getElementById('res-baguette').innerText = baguetteCost.toLocaleString();
+            document.getElementById('res-mount').innerText = mountCost.toLocaleString();
+            document.getElementById('res-extra').innerText = extraCost.toLocaleString();
+            document.getElementById('res-labor').innerText = laborCost.toLocaleString();
+            document.getElementById('res-total').innerText = total.toLocaleString();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            calculateTotal(); 
+
+            const calcInputs = document.querySelectorAll('#calculator input, #calculator select');
+            calcInputs.forEach(input => {
+                input.addEventListener('input', calculateTotal);
+                input.addEventListener('change', calculateTotal);
+            });
+        });
+    </script>
+</body>
+</html>
