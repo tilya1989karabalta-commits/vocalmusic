@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Натяжные потолки — Прайс жана калькулятор</title>
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--ink:#1c2433;--muted:#6b7588;--brand:#0b5ed7;--brand2:#0a3d91;--line:#e1e6ef;--ok:#16a34a;--bad:#dc2626}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,var(--brand2),var(--brand));color:#fff;padding:22px 16px}
+.wrap{max-width:1050px;margin:0 auto;padding:0 14px}
+header h1{margin:0 0 6px;font-size:26px}
+header p{margin:2px 0;opacity:.95;font-size:15px}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0}
+nav button{flex:1;min-width:140px;padding:12px;border:0;border-radius:10px;background:#fff;color:var(--ink);font-weight:600;font-size:15px;cursor:pointer;box-shadow:0 1px 3px #0001}
+nav button.on{background:var(--brand);color:#fff}
+.card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 2px 10px #0000000d;margin-bottom:16px}
+h2{margin:0 0 12px;font-size:20px}
+h3{margin:18px 0 8px;font-size:16px;color:var(--brand2)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:middle}
+th{background:#eef3fb;color:var(--brand2);font-size:13px}
+td.r,th.r{text-align:right}
+input,select{padding:9px;border:1px solid #cfd6e4;border-radius:8px;font-size:14px;width:100%;background:#fff}
+input[type=number]{max-width:120px}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>div{flex:1;min-width:160px}
+.btn{padding:10px 16px;border:0;border-radius:9px;background:var(--brand);color:#fff;font-weight:600;cursor:pointer;font-size:14px}
+.btn.gray{background:#e8ecf4;color:var(--ink)}
+.btn.red{background:var(--bad)}
+.btn.green{background:var(--ok)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.total{display:flex;justify-content:space-between;align-items:center;background:#eef3fb;border-radius:10px;padding:14px 16px;margin-top:12px;font-size:18px;font-weight:700;color:var(--brand2)}
+.muted{color:var(--muted);font-size:13px}
+.cat td{background:#f7f9fd;font-weight:700;color:var(--brand2)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.pad{display:none}
+.printhead{display:none}
+section.tab{display:none}section.tab.on{display:block}
+@media print{
+ body{background:#fff}header,nav,.tools,.noprint,.btn{display:none!important}
+ .card{box-shadow:none;padding:0}
+ .printhead{display:block;border-bottom:3px solid #0b5ed7;margin-bottom:14px;padding-bottom:8px}
+ .printhead h1{margin:0;font-size:22px}
+ input,select{border:0;padding:0;background:none;appearance:none}
+ section.tab{display:none!important}section.tab.on{display:block!important}
+}
+@media(max-width:600px){th,td{padding:7px 4px;font-size:13px}header h1{font-size:21px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <h1>🏠 Натяжные потолки</h1>
+ <p>📍 Кара-Балта шаары, Садовая көчөсү 113</p>
+ <p>📞 0556-652-652 &nbsp;|&nbsp; 0559-656-657</p>
+</div></header>
+
+<div class="wrap">
+<nav>
+ <button data-t="price" class="on">📋 Прайс</button>
+ <button data-t="calc">🧮 Товар калькулятору</button>
+ <button data-t="ceil">📐 Потолок (м²) эсептөө</button>
+ <button data-t="edit">⚙️ Товарларды башкаруу</button>
+</nav>
+
+<!-- ПРАЙС -->
+<section class="tab on" id="price">
+ <div class="card">
+  <div class="printhead"><h1>Натяжные потолки — ПРАЙС</h1>
+   <div>Кара-Балта ш., Садовая көчөсү 113 • 0556-652-652, 0559-656-657</div><div id="pdate"></div></div>
+  <h2>Прайс-лист</h2>
+  <div id="priceBox"></div>
+  <div class="tools"><button class="btn" onclick="window.print()">🖨 Басып чыгаруу / PDF</button></div>
+ </div>
+</section>
+
+<!-- КАЛЬКУЛЯТОР -->
+<section class="tab" id="calc">
+ <div class="card">
+  <div class="printhead"><h1>Эсеп-кысап (смета)</h1>
+   <div>Кара-Балта ш., Садовая көчөсү 113 • 0556-652-652, 0559-656-657</div></div>
+  <h2>Товар калькулятору</h2>
+  <div class="row">
+   <div><label>Кардардын аты</label><input id="cName" placeholder="Мис: Асан Үсөнов"></div>
+   <div><label>Дата</label><input id="cDate" type="date"></div>
+   <div><label>Арзандатуу, %</label><input id="cDisc" type="number" min="0" max="100" value="0"></div>
+  </div>
+  <h3>Товар кошуу</h3>
+  <div class="row noprint">
+   <div style="flex:3"><select id="cSel"></select></div>
+   <div><input id="cQty" type="number" min="0" step="any" value="1"></div>
+   <div><button class="btn" onclick="calcAdd()">➕ Кошуу</button></div>
+  </div>
+  <div style="overflow:auto"><table id="cTbl"></table></div>
+  <div class="total"><span>Жалпы сумма:</span><span id="cTotal">0 сом</span></div>
+  <div class="tools"><button class="btn" onclick="window.print()">🖨 Басып чыгаруу / PDF</button>
+   <button class="btn green" onclick="copyEst('c')">📋 Көчүрүү</button>
+   <button class="btn green" onclick="waEst('c')">💬 WhatsApp</button>
+   <button class="btn gray" onclick="calcClear()">🗑 Тазалоо</button></div>
+ </div>
+</section>
+
+<!-- ПОТОЛОК -->
+<section class="tab" id="ceil">
+ <div class="card">
+  <div class="printhead"><h1>Натяжной потолок — эсеп-кысап</h1>
+   <div>Кара-Балта ш., Садовая көчөсү 113 • 0556-652-652, 0559-656-657</div></div>
+  <h2>Натяжной потолок эсептөө (автоматтык)</h2>
+  <div class="row">
+   <div><label>Кардардын аты</label><input id="kName" placeholder="Мис: Бермет Алиева"></div>
+   <div><label>Дата</label><input id="kDate" type="date"></div>
+   <div><label>Арзандатуу, %</label><input id="kDisc" type="number" min="0" max="100" value="0"></div>
+  </div>
+  <h3>Бөлмөлөр (узундук × туурасы, метр)</h3>
+  <div style="overflow:auto"><table id="rTbl"></table></div>
+  <div class="tools noprint"><button class="btn green" onclick="roomAdd()">➕ Бөлмө кошуу</button></div>
+
+  <h3>Эсептөө параметрлери</h3>
+  <div class="row noprint">
+   <div><label>Светильник: канча м² га 1 даана</label><input id="pSpot" type="number" step="any" value="3"></div>
+   <div><label>Бекитүү кадамы (дюбель/саморез), см</label><input id="pStep" type="number" step="any" value="15"></div>
+   <div><label>Полотно запасы, %</label><input id="pRes" type="number" step="any" value="10"></div>
+  </div>
+  <div class="muted noprint" style="margin-top:6px">Бардык материал бааларын «Товарларды башкаруу» бөлүмүнөн өзгөртсөңүз болот.</div>
+
+  <h3>Материалдар жана жумуш</h3>
+  <div style="overflow:auto"><table id="kTbl"></table></div>
+  <div class="total"><span>Жалпы сумма:</span><span id="kTotal">0 сом</span></div>
+  <div class="tools"><button class="btn" onclick="window.print()">🖨 Басып чыгаруу / PDF</button>
+   <button class="btn green" onclick="copyEst('k')">📋 Көчүрүү</button>
+   <button class="btn green" onclick="waEst('k')">💬 WhatsApp</button></div>
+ </div>
+</section>
+
+<!-- РЕДАКТОР -->
+<section class="tab" id="edit">
+ <div class="card">
+  <h2>Товарларды башкаруу</h2>
+  <h3>Жаңы товар кошуу</h3>
+  <div class="row">
+   <div style="flex:3"><label>Аталышы</label><input id="nName"></div>
+   <div><label>Бөлүм</label><input id="nCat" list="cats" placeholder="Мис: Профиль"></div>
+   <div><label>Бирдик</label><input id="nUnit" value="шт"></div>
+   <div><label>Баасы (сом)</label><input id="nPrice" type="number" step="any"></div>
+   <div style="align-self:flex-end"><button class="btn green" onclick="prodAdd()">➕ Кошуу</button></div>
+  </div>
+  <datalist id="cats"></datalist>
+  <h3>Бардык товарлар (аталышын жана баасын түз эле өзгөртүңүз)</h3>
+  <div style="overflow:auto"><table id="eTbl"></table></div>
+  <div class="tools">
+   <button class="btn gray" onclick="exportData()">⬇ Сактоо (JSON)</button>
+   <button class="btn gray" onclick="document.getElementById('imp').click()">⬆ Жүктөө (JSON)</button>
+   <input id="imp" type="file" accept=".json" style="display:none" onchange="importData(event)">
+   <button class="btn red" onclick="resetAll()">↺ Баштапкы абалга</button>
+  </div>
+  <p class="muted">Өзгөртүүлөр ушул браузерде автоматтык түрдө сакталат.</p>
+ </div>
+</section>
+</div>
+
+<script>
+// ---------- Маалымат ----------
+var KEY='nat_potolki_v1';
+// code: потолок эсептөөдө колдонулуучу ролдор
+var DEFAULTS=[
+ {id:'canvas',name:'Полотно ПВХ (мат/глянец) 3.2 м',cat:'Полотно',unit:'м²',price:350,role:'canvas'},
+ {id:'baget',name:'Профиль (багет) алюминий 2.5 м',cat:'Профиль',unit:'шт',price:180,role:'baget'},
+ {id:'vstavka',name:'Декоративная вставка 2 м',cat:'Профиль',unit:'шт',price:90,role:'vstavka'},
+ {id:'dubel',name:'Дюбель-гвоздь',cat:'Крепёж',unit:'шт',price:3,role:'dubel'},
+ {id:'samorez',name:'Саморез',cat:'Крепёж',unit:'шт',price:1,role:'samorez'},
+ {id:'spot',name:'Светильник точечный LED',cat:'Свет',unit:'шт',price:450,role:'spot'},
+ {id:'work',name:'Монтаж (работа)',cat:'Иш',unit:'м²',price:300,role:'work'},
+ {id:'p1',name:'Люстра подвес. платформа',cat:'Свет',unit:'шт',price:350},
+ {id:'p2',name:'Подшторник (карниз) ПВХ 2 м',cat:'Профиль',unit:'шт',price:420},
+ {id:'p3',name:'Лента LED 5 м (с блоком питания)',cat:'Свет',unit:'шт',price:900},
+ {id:'p4',name:'Углы (внутренние/наружные)',cat:'Профиль',unit:'шт',price:25}
+];
+var P=load();
+function load(){try{var s=JSON.parse(localStorage.getItem(KEY));if(s&&s.length)return s}catch(e){}return JSON.parse(JSON.stringify(DEFAULTS))}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fmt(n){return (Math.round(n*100)/100).toLocaleString('ru-RU')}
+function byRole(r){return P.find(function(p){return p.role===r})}
+function byId(id){return P.find(function(p){return p.id===id})}
+
+// ---------- Табдар ----------
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('on')});
+ document.querySelectorAll('section.tab').forEach(function(x){x.classList.remove('on')});
+ b.classList.add('on');document.getElementById(b.dataset.t).classList.add('on');
+}});
+var today=new Date().toISOString().slice(0,10);
+['cDate','kDate'].forEach(function(i){document.getElementById(i).value=today});
+document.getElementById('pdate').textContent='Дата: '+new Date().toLocaleDateString('ru-RU');
+
+// ---------- Прайс ----------
+function renderPrice(){
+ var cats={};P.forEach(function(p){(cats[p.cat||'Башка']=cats[p.cat||'Башка']||[]).push(p)});
+ var h='<table><tr><th>№</th><th>Товар</th><th>Бирдик</th><th class="r">Баасы</th></tr>',n=0;
+ Object.keys(cats).forEach(function(c){
+  h+='<tr class="cat"><td colspan="4">'+esc(c)+'</td></tr>';
+  cats[c].forEach(function(p){n++;h+='<tr><td>'+n+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.unit)+'</td><td class="r"><b>'+fmt(p.price)+' сом</b></td></tr>'});
+ });
+ document.getElementById('priceBox').innerHTML=h+'</table>';
+}
+
+// ---------- Товар калькулятору ----------
+var C=[]; // {id,qty}
+function renderSel(){
+ document.getElementById('cSel').innerHTML=P.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+' — '+fmt(p.price)+' сом/'+esc(p.unit)+'</option>'}).join('');
+}
+function calcAdd(){
+ var id=document.getElementById('cSel').value,q=parseFloat(document.getElementById('cQty').value)||0;
+ if(!id||q<=0)return;
+ var e=C.find(function(x){return x.id===id});
+ if(e)e.qty+=q;else C.push({id:id,qty:q});
+ renderCalc();
+}
+function calcClear(){C=[];renderCalc()}
+function renderCalc(){
+ var h='<tr><th>№</th><th>Товар</th><th>Саны</th><th>Бирдик</th><th class="r">Баасы</th><th class="r">Сумма</th><th class="noprint"></th></tr>';
+ C=C.filter(function(x){return byId(x.id)});
+ C.forEach(function(x,i){var p=byId(x.id);
+  h+='<tr><td>'+(i+1)+'</td><td>'+esc(p.name)+'</td><td><input type="number" step="any" min="0" value="'+x.qty+'" oninput="C['+i+'].qty=parseFloat(this.value)||0;calcTotals()"></td><td>'+esc(p.unit)+'</td><td class="r">'+fmt(p.price)+'</td><td class="r" id="cs'+i+'"></td><td class="noprint"><button class="btn red sm" onclick="C.splice('+i+',1);renderCalc()">✕</button></td></tr>'});
+ document.getElementById('cTbl').innerHTML=h;calcTotals();
+}
+function calcTotals(){
+ var s=0;C.forEach(function(x,i){var p=byId(x.id),v=p.price*x.qty;s+=v;var el=document.getElementById('cs'+i);if(el)el.textContent=fmt(v)});
+ var d=parseFloat(document.getElementById('cDisc').value)||0;
+ var t=s*(1-d/100);
+ document.getElementById('cTotal').innerHTML=(d>0?'<span class="muted" style="font-weight:400">('+fmt(s)+' − '+d+'%) &nbsp;</span>':'')+fmt(t)+' сом';
+}
+document.getElementById('cDisc').oninput=calcTotals;
+
+// ---------- Потолок ----------
+var R=[{name:'Зал',a:4,b:5}];
+function roomAdd(){R.push({name:'Бөлмө '+(R.length+1),a:3,b:3});renderRooms()}
+function renderRooms(){
+ var h='<tr><th>Бөлмө</th><th>Узундук, м</th><th>Туурасы, м</th><th class="r">Аянты, м²</th><th class="r">Периметр, м</th><th class="noprint"></th></tr>';
+ R.forEach(function(r,i){
+  h+='<tr><td><input value="'+esc(r.name)+'" oninput="R['+i+'].name=this.value"></td>'+
+  '<td><input type="number" step="any" min="0" value="'+r.a+'" oninput="R['+i+'].a=parseFloat(this.value)||0;ceilCalc()"></td>'+
+  '<td><input type="number" step="any" min="0" value="'+r.b+'" oninput="R['+i+'].b=parseFloat(this.value)||0;ceilCalc()"></td>'+
+  '<td class="r" id="ra'+i+'"></td><td class="r" id="rp'+i+'"></td>'+
+  '<td class="noprint"><button class="btn red sm" onclick="R.splice('+i+',1);renderRooms()">✕</button></td></tr>'});
+ h+='<tr class="cat"><td>Жалпы</td><td></td><td></td><td class="r" id="rA"></td><td class="r" id="rP"></td><td class="noprint"></td></tr>';
+ document.getElementById('rTbl').innerHTML=h;ceilCalc();
+}
+var K=[]; // сап: {id,qty,auto}
+function num(id,def){var v=parseFloat(document.getElementById(id).value);return isFinite(v)&&v>0?v:def}
+function ceilCalc(){
+ var A=0,Pm=0;
+ R.forEach(function(r,i){var a=r.a*r.b,p=2*(r.a+r.b);A+=a;Pm+=p;
+  document.getElementById('ra'+i).textContent=fmt(a);document.getElementById('rp'+i).textContent=fmt(p)});
+ document.getElementById('rA').textContent=fmt(A)+' м²';document.getElementById('rP').textContent=fmt(Pm)+' м';
+ var spotN=num('pSpot',3),step=num('pStep',15)/100,res=num('pRes',10);
+ var lines=[
+  ['canvas',Math.ceil(A*(1+res/100)*10)/10],
+  ['baget',Math.ceil(Pm/2.5)],
+  ['vstavka',Math.ceil(Pm/2)],
+  ['dubel',Math.ceil(Pm/step)],
+  ['samorez',Math.ceil(Pm/step)],
+  ['spot',Math.round(A/spotN)],
+  ['work',Math.round(A*100)/100]
+ ];
+ var h='<tr><th>№</th><th>Аталышы</th><th>Саны</th><th>Бирдик</th><th class="r">Баасы</th><th class="r">Сумма</th></tr>',s=0,n=0;
+ lines.forEach(function(l){var p=byRole(l[0]);if(!p)return;n++;var v=l[1]*p.price;s+=v;
+  h+='<tr><td>'+n+'</td><td>'+esc(p.name)+'</td><td><b>'+l[1]+'</b></td><td>'+esc(p.unit)+'</td><td class="r">'+fmt(p.price)+'</td><td class="r">'+fmt(v)+'</td></tr>'});
+ document.getElementById('kTbl').innerHTML=h;
+ var d=parseFloat(document.getElementById('kDisc').value)||0;
+ document.getElementById('kTotal').innerHTML=(d>0?'<span class="muted" style="font-weight:400">('+fmt(s)+' − '+d+'%) &nbsp;</span>':'')+fmt(s*(1-d/100))+' сом';
+}
+['pSpot','pStep','pRes','kDisc'].forEach(function(i){document.getElementById(i).oninput=ceilCalc});
+
+// ---------- Редактор ----------
+function renderEdit(){
+ var h='<tr><th>Аталышы</th><th>Бөлүм</th><th>Бирдик</th><th>Баасы</th><th></th></tr>';
+ P.forEach(function(p,i){
+  h+='<tr><td><input value="'+esc(p.name)+'" onchange="P['+i+'].name=this.value;saveAll()"></td>'+
+  '<td><input value="'+esc(p.cat||'')+'" onchange="P['+i+'].cat=this.value;saveAll()"></td>'+
+  '<td><input style="max-width:80px" value="'+esc(p.unit)+'" onchange="P['+i+'].unit=this.value;saveAll()"></td>'+
+  '<td><input type="number" step="any" value="'+p.price+'" onchange="P['+i+'].price=parseFloat(this.value)||0;saveAll()"></td>'+
+  '<td>'+(p.role?'<span class="muted" title="Потолок эсептөөдө колдонулат">🔒</span>':'<button class="btn red sm" onclick="prodDel('+i+')">✕</button>')+'</td></tr>'});
+ document.getElementById('eTbl').innerHTML=h;
+ var cs={};P.forEach(function(p){if(p.cat)cs[p.cat]=1});
+ document.getElementById('cats').innerHTML=Object.keys(cs).map(function(c){return '<option value="'+esc(c)+'">'}).join('');
+}
+function saveAll(){save();renderPrice();renderSel();renderCalc();ceilCalc()}
+function prodAdd(){
+ var n=document.getElementById('nName').value.trim(),pr=parseFloat(document.getElementById('nPrice').value);
+ if(!n||!isFinite(pr)){alert('Аталышын жана баасын жазыңыз');return}
+ P.push({id:'u'+Date.now(),name:n,cat:document.getElementById('nCat').value.trim()||'Башка',unit:document.getElementById('nUnit').value.trim()||'шт',price:pr});
+ document.getElementById('nName').value='';document.getElementById('nPrice').value='';
+ save();renderEdit();saveAll();
+}
+function prodDel(i){if(confirm('«'+P[i].name+'» өчүрүлсүнбү?')){P.splice(i,1);save();renderEdit();saveAll()}}
+function exportData(){
+ var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(P,null,1)],{type:'application/json'}));
+ a.download='tovarlar.json';a.click();
+}
+function importData(e){
+ var f=e.target.files[0];if(!f)return;var r=new FileReader();
+ r.onload=function(){try{var d=JSON.parse(r.result);if(!Array.isArray(d))throw 0;P=d;save();renderEdit();saveAll()}catch(x){alert('Файл туура эмес')}};
+ r.readAsText(f);
+}
+function resetAll(){if(confirm('Бардык товарлар баштапкы абалга кайтсынбы?')){P=JSON.parse(JSON.stringify(DEFAULTS));save();renderEdit();saveAll()}}
+
+
+// ---------- Көчүрүү / WhatsApp ----------
+function estText(w){
+ var c=w==='c',tb=document.getElementById(c?'cTbl':'kTbl');
+ var name=document.getElementById(c?'cName':'kName').value.trim();
+ var date=document.getElementById(c?'cDate':'kDate').value;
+ var t='🏠 НАТЯЖНЫЕ ПОТОЛКИ\n📍 Кара-Балта ш., Садовая көчөсү 113\n📞 0556-652-652, 0559-656-657\n\n';
+ t+=(c?'ЭСЕП-КЫСАП':'ПОТОЛОК ЭСЕБИ')+'\n';
+ if(name)t+='Кардар: '+name+'\n';
+ if(date)t+='Дата: '+date.split('-').reverse().join('.')+'\n';
+ if(!c){t+='Аянты: '+document.getElementById('rA').textContent+', периметр: '+document.getElementById('rP').textContent+'\n'}
+ t+='\n';
+ tb.querySelectorAll('tr').forEach(function(tr){
+  var td=tr.querySelectorAll('td');if(td.length<6)return;
+  var v=function(i){var x=td[i],inp=x.querySelector('input');return inp?inp.value:x.textContent.trim()};
+  t+=v(0)+'. '+v(1)+' — '+v(2)+' '+v(3)+' × '+v(4)+' = '+v(5)+' сом\n';
+ });
+ t+='\nЖАЛПЫ: '+document.getElementById(c?'cTotal':'kTotal').textContent.replace(/\s+/g,' ').trim();
+ return t;
+}
+function copyEst(w){
+ var t=estText(w);
+ function ok(){alert('Көчүрүлдү ✅')}
+ function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){prompt('Ушуну көчүрүңүз:',t)}a.remove()}
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(ok,fb);else fb();
+}
+function waEst(w){window.open('https://wa.me/?text='+encodeURIComponent(estText(w)),'_blank')}
+
+// ---------- Старт ----------
+renderPrice();renderSel();renderCalc();renderRooms();renderEdit();
+</script>
+</body>
+</html>
